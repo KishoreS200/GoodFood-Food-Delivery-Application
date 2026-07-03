@@ -14,8 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/MenuServlet")
 public class MenuServlet extends HttpServlet {
@@ -29,14 +28,16 @@ public class MenuServlet extends HttpServlet {
 	            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Restaurant ID is required");
 	            return;
 	        }
+	       
 
 	        int restaurantId = Integer.parseInt(id);
 	        List<Menu> menuList = menuDAO.getMenusByRestaurantId(restaurantId);
 	        System.out.println(menuList);
 	        req.setAttribute("menuList", menuList);
+	        HttpSession session = req.getSession();
+	        session.setAttribute("restaurantId", restaurantId);
 	        System.out.println("Restaurant ID = " + req.getParameter("restaurantId"));
 	        RequestDispatcher rd = req.getRequestDispatcher("menu.jsp");
-	        rd.forward(req, resp);
-	        
+	        rd.forward(req, resp);     
 	}
 }
