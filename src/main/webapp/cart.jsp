@@ -200,11 +200,26 @@ tr:hover {
 			<h2>🛒 GoodFoods</h2>
 
 			<div>
+			<% Integer restaurantId = (Integer) session.getAttribute("restaurantId");%>
 
-				<a href="home.jsp">Home</a> 
-				<a href="RestaurantServlet">Restaurants</a>
+    <a href="home.jsp">Home</a>
 
-			</div>
+    <a href="RestaurantServlet">Restaurants</a>
+
+    <%
+    	
+        if (restaurantId != null) {
+    %>
+
+        <a href="MenuServlet?restaurantId=<%= restaurantId %>">
+            Menu
+        </a>
+
+    <%
+        }
+    %>
+
+</div>
 
 		</nav>
 
