@@ -23,7 +23,7 @@ public class RestaurantServlet extends HttpServlet{
 		RestaurantDAOImpl restaurantDAOImpl=new RestaurantDAOImpl();
 		List<Restaurant> allRestaurant = restaurantDAOImpl.getAllRestaurant();
 		System.out.println(allRestaurant);
-		System.out.println("Restaurant Count = " + allRestaurant.size());
+		
 		
 		req.setAttribute("allRestaurants", allRestaurant);
 		RequestDispatcher rd = req.getRequestDispatcher("restaurant.jsp");
