@@ -14,17 +14,15 @@ import com.food.utility.DBConnection;
 
 public class OrderTableDAOImpl implements OrderTableDAO {
 
-	private static final String INSERT_QUERY = "INSERT INTO OrderTable"
-			+ "(userId, restaurantId, orderDate, totalAmount, status, paymentMethod, deliveryAddress)"
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
-	private static final String GET_QUERY = "SELECT * FROM orderTable WHERE orderId = ?";
+	private static final String INSERT_QUERY = "INSERT INTO ordertable(userId, restaurantId, orderDate, totalAmount, status, paymentMethod, deliveryAddress) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	private static final String GET_QUERY = "SELECT * FROM ordertable WHERE orderId = ?";
 	private static final String GET_ALL_QUERY = "SELECT * FROM orderTable";
-	private static final String UPDATE_QUERY = "SELECT orderTable SET userId=?, restaurantId=?, orderDate=?, totalAmount=?, status=?, paymentMethod=?, deliveryAddress=?"
+	private static final String UPDATE_QUERY = "UPDATE ordertable SET userId=?, restaurantId=?, orderDate=?, totalAmount=?, status=?, paymentMethod=?, deliveryAddress=?"
 			+ "WHERE orderId=?";
-	private static final String GET_QUERY_BY_USERID = "SELECT * FROM orderTable WHERE userId = ?";
-	private static final String GET_QUERY_BY_RESID = "SELECT * FROM orderTable WHERE restaurantId = ?";
-	private static final String DELETE_QUERY = "DELETE FROM orderTable WHERE orderID=?";
-	private static final String GET_QUERY_BY_STATUS = "SELECT * FROM orderTable WHERE status = ?";
+	private static final String GET_QUERY_BY_USERID = "SELECT * FROM ordertable WHERE userId = ? ORDER BY orderDate DESC";
+	private static final String GET_QUERY_BY_RESID = "SELECT * FROM ordertable WHERE restaurantId = ?";
+	private static final String DELETE_QUERY = "DELETE FROM ordertable WHERE orderId=?";
+	private static final String GET_QUERY_BY_STATUS = "SELECT * FROM ordertable WHERE status = ?";
 	private static Connection con = null;
 
 	@Override
@@ -203,10 +201,10 @@ public class OrderTableDAOImpl implements OrderTableDAO {
 		Double totalAmount = res.getDouble("totalAmount");
 		String status = res.getString("status");
 		String payment = res.getString("paymentMethod");
-		String deliverAddress = res.getString("deliverAddress");
+		String deliveryAddress = res.getString("deliveryAddress");
 
 		OrderTable oi = new OrderTable(id, userId, restaurantId, orderDate, totalAmount, status, payment,
-				deliverAddress);
+				deliveryAddress);
 		return oi;
 	}
 

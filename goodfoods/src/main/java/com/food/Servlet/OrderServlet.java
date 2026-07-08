@@ -1,6 +1,7 @@
 package com.food.Servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import com.food.DAO.OrderTableDAO;
 import com.food.DAO.OrderItemDAO;
@@ -29,6 +30,7 @@ public class OrderServlet extends HttpServlet {
 
 		User user = (User) session.getAttribute("loggedInUser");
 		Cart cart = (Cart) session.getAttribute("cart");
+		
 		Integer restaurantId = (Integer) session.getAttribute("restaurantId");
 
 		if (user == null) {
@@ -52,6 +54,7 @@ public class OrderServlet extends HttpServlet {
 		order.setDeliveryAddress(address);
 		order.setPaymentMethod(paymentMethod);
 		order.setStatus("Pending");
+		order.setOrderDate(new Timestamp(System.currentTimeMillis()));
 
 		OrderTableDAOImpl orderDAO = new OrderTableDAOImpl();
 

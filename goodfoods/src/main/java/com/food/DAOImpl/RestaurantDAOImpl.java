@@ -14,8 +14,10 @@ import com.food.utility.DBConnection;
 
 public class RestaurantDAOImpl implements RestaurantDAO{
 
-	private static final String INSERT_QUERY="INSERT INTO restaurant(name, cuisineType, deliveryTime, address, adminUserId, isActive) VALUES (?,?,?,?,?,?)";
-	private static final String UPDATE_QUERY = "UPDATE restaurant SET name=?, cuisineType=?, deliveryTime=?, address=?, adminUserId=?, isActive=? WHERE restaurantId=?";
+	private static final String INSERT_QUERY =
+			"INSERT INTO restaurant(name, cuisineType, deliveryTime, address, adminUserId, isActive, image) VALUES (?,?,?,?,?,?,?)";
+	private static final String UPDATE_QUERY =
+			"UPDATE restaurant SET name=?, cuisineType=?, deliveryTime=?, address=?, adminUserId=?, isActive=?, image=? WHERE restaurantId=?";
 	private static final String DELETE_QUERY = "DELETE FROM restaurant WHERE restaurantId=?";
 	private static final String GET_QUERY = "SELECT * FROM restaurant WHERE restaurantId=?";
 	private static final String GET_ALL_QUERY = "SELECT * FROM restaurant";
@@ -33,6 +35,7 @@ public class RestaurantDAOImpl implements RestaurantDAO{
 			pstmt.setString(4, res.getAddress());
 			pstmt.setInt(5, res.getAdminUserId());
 			pstmt.setByte(6, res.getIsActive());
+			pstmt.setString(7, res.getImage());
 			
 	        int rows = pstmt.executeUpdate();
 	        System.out.println("Rows inserted: " + rows);
@@ -52,7 +55,9 @@ public class RestaurantDAOImpl implements RestaurantDAO{
 			pstmt.setString(4, res.getAddress());
 			pstmt.setInt(5, res.getAdminUserId());
 			pstmt.setByte(6, res.getIsActive());
-			pstmt.setInt(7,res.getRestaurantId());
+			pstmt.setString(7, res.getImage());
+			
+			pstmt.setInt(8,res.getRestaurantId());
 			
 			ResultSet i = pstmt.executeQuery();
 			System.out.println(i);
@@ -95,8 +100,9 @@ public class RestaurantDAOImpl implements RestaurantDAO{
 				int adminUserId=result.getInt("adminUserId");
 				double rating=result.getDouble("rating");
 				byte isActive = result.getByte("isActive");
+				String image = result.getString("image");
 				
-				r = new Restaurant(id, name, cuisineType, deliveryTime, address, adminUserId, rating, isActive);
+				r = new Restaurant(id, name, cuisineType, deliveryTime, address, adminUserId, rating, isActive, image);
 			}
 			
 		} catch (SQLException e) {
@@ -149,8 +155,9 @@ public class RestaurantDAOImpl implements RestaurantDAO{
 		int adminUserId=result.getInt("adminUserId");
 		double rating=result.getDouble("rating");
 		byte isActive = result.getByte("isActive");
+		String image = result.getString("image");
 		
-		Restaurant res = new Restaurant(id, name, cuisineType, deliveryTime, address, adminUserId, rating, isActive);
+		Restaurant res = new Restaurant(id, name, cuisineType, deliveryTime, address, adminUserId, rating, isActive, image);
 		return res;
 	}
 }

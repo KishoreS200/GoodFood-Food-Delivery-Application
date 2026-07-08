@@ -13,58 +13,58 @@ import com.food.DAO.UserDAO;
 import com.food.model.User;
 import com.food.utility.DBConnection;
 
-public class UserDAOImpl implements UserDAO{
-	
-	public static final String INSERT_QUERY="INSERT INTO user (userName, email, "
+public class UserDAOImpl implements UserDAO {
+
+	public static final String INSERT_QUERY = "INSERT INTO user (userName, email, "
 			+ "password, address, role, lastLogged) VALUES(?,?,?,?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE user SET userName=?, email=?, password=?, "
 			+ "address=?, lastLogged=? WHERE userId=?";
-	private static final String GET_QUERY="SELECT * FROM user WHERE userId=?";
-	private static final String DELETE_QUERY="DELETE FROM user WHERE userId=?";
-	private static final String GET_ALL_QUERY ="SELECT * FROM user";
-	
+	private static final String GET_QUERY = "SELECT * FROM user WHERE userId=?";
+	private static final String DELETE_QUERY = "DELETE FROM user WHERE userId=?";
+	private static final String GET_ALL_QUERY = "SELECT * FROM user";
+	private static final String GET_USER_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
 	private static final String LOGIN_QUERY = "SELECT * FROM user WHERE email=? AND password=?";
+
 	@Override
 	public void addUser(User u) {
-		Connection con=DBConnection.getConnection();
-		
+		Connection con = DBConnection.getConnection();
+
 		try {
-			PreparedStatement pstmt=con.prepareStatement(INSERT_QUERY);
-			
+			PreparedStatement pstmt = con.prepareStatement(INSERT_QUERY);
+
 			pstmt.setString(1, u.getUserName());
 			pstmt.setString(2, u.getEmail());
 			pstmt.setString(3, u.getPassword());
 			pstmt.setString(4, u.getAddress());
 			pstmt.setString(5, u.getRole());
 			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-			
-			
+
 			int i = pstmt.executeUpdate();
 			System.out.println(i);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void updateUser(User u){
+	public void updateUser(User u) {
 		Connection con = DBConnection.getConnection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(UPDATE_QUERY);
-			
+
 			pstmt.setString(1, u.getUserName());
 			pstmt.setString(2, u.getEmail());
 			pstmt.setString(3, u.getPassword());
 			pstmt.setString(4, u.getAddress());
 			pstmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
-			pstmt.setInt(6,u.getUserId());
+			pstmt.setInt(6, u.getUserId());
 			int i = pstmt.executeUpdate();
 			System.out.println(i);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -82,28 +82,27 @@ public class UserDAOImpl implements UserDAO{
 
 	@Override
 	public User getUser(int userId) {
-		Connection con=DBConnection.getConnection();
-		User u=null;
+		Connection con = DBConnection.getConnection();
+		User u = null;
 		try {
 			PreparedStatement pstmt = con.prepareStatement(GET_QUERY);
 			pstmt.setInt(1, userId);
-			
+
 			ResultSet res = pstmt.executeQuery();
-			
-			while(res.next())
-			{
+
+			while (res.next()) {
 				int id = res.getInt("userId");
 				String name = res.getString("userName");
 				String email = res.getString("email");
 				String password = res.getString("password");
 				String address = res.getString("address");
 				String role = res.getString("role");
-				Timestamp currentDate=res.getTimestamp("createdDate");
+				Timestamp currentDate = res.getTimestamp("createdDate");
 				Timestamp lastLogged = res.getTimestamp("lastLogged");
-				
-				u=new User(id, name, email, password, address, role, currentDate, lastLogged);
+
+				u = new User(id, name, email, password, address, role, currentDate, lastLogged);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -116,11 +115,10 @@ public class UserDAOImpl implements UserDAO{
 		List<User> list = new ArrayList<>();
 		try {
 			Statement stmt = con.createStatement();
-			
+
 			ResultSet res = stmt.executeQuery(GET_ALL_QUERY);
-			while(res.next())
-			{
-				User u1=getUserAllFromResultSet(res);
+			while (res.next()) {
+				User u1 = getUserAllFromResultSet(res);
 				list.add(u1);
 			}
 		} catch (SQLException e) {
@@ -128,8 +126,38 @@ public class UserDAOImpl implements UserDAO{
 		}
 		return list;
 	}
-	
+
 	public User login(String email, String password) {
+
+		Connection con = DBConnection.getConnection();
+
+		User user = null;
+
+		try {
+
+			PreparedStatement pstmt = con.prepareStatement(LOGIN_QUERY);
+
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+
+			ResultSet res = pstmt.executeQuery();
+
+			if (res.next()) {
+
+				user = getUserAllFromResultSet(res);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return user;
+	}
+	
+	public User getUserByEmail(String email) {
 
 	    Connection con = DBConnection.getConnection();
 
@@ -137,42 +165,42 @@ public class UserDAOImpl implements UserDAO{
 
 	    try {
 
-	        PreparedStatement pstmt =
-	                con.prepareStatement(LOGIN_QUERY);
+	        PreparedStatement pstmt = con.prepareStatement(GET_USER_BY_EMAIL);
 
 	        pstmt.setString(1, email);
-	        pstmt.setString(2, password);
 
-	        ResultSet res = pstmt.executeQuery();
+	        ResultSet rs = pstmt.executeQuery();
 
-	        if (res.next()) {
+	        if (rs.next()) {
 
-	            user = getUserAllFromResultSet(res);
+	            user = new User();
+
+	            user.setUserId(rs.getInt("userId"));
+	            user.setUserName(rs.getString("userName"));
+	            user.setEmail(rs.getString("email"));
+	            user.setPassword(rs.getString("password"));
+	            user.setAddress(rs.getString("address"));
 
 	        }
 
-	    }
-	    catch (SQLException e) {
-
+	    } catch (SQLException e) {
 	        e.printStackTrace();
-
 	    }
 
 	    return user;
 	}
-	
-	public static User getUserAllFromResultSet(ResultSet res) throws SQLException
-	{
+
+	public static User getUserAllFromResultSet(ResultSet res) throws SQLException {
 		int id = res.getInt("userId");
 		String name = res.getString("userName");
 		String email = res.getString("email");
 		String password = res.getString("password");
 		String address = res.getString("address");
 		String role = res.getString("role");
-		Timestamp currentDate=res.getTimestamp("createdDate");
+		Timestamp currentDate = res.getTimestamp("createdDate");
 		Timestamp lastLogged = res.getTimestamp("lastLogged");
-		
-		User u=new User(id, name, email, password, address, role, currentDate, lastLogged);
+
+		User u = new User(id, name, email, password, address, role, currentDate, lastLogged);
 		return u;
 	}
 }

@@ -146,6 +146,60 @@ textarea:focus{
     background:#218838;
 }
 
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.profile{
+    position:relative;
+    display:inline-block;
+}
+
+.profile-btn{
+    background:white;
+    color:#ff6b35;
+    border:none;
+    padding:8px 15px;
+    border-radius:25px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.profile-btn:hover{
+    background:#fff3ec;
+}
+
+.dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    right:0;
+    width:180px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
+    overflow:hidden;
+    z-index:1000;
+}
+
+.dropdown a{
+    display:block;
+    padding:12px 15px;
+    color:#333;
+    text-decoration:none;
+}
+
+.dropdown a:hover{
+    background:#fff5f0;
+}
+
+.profile:hover .dropdown{
+    display:block;
+}
+
 </style>
 
 </head>
@@ -167,19 +221,53 @@ textarea:focus{
 
 <header>
 
-    <nav>
+<nav>
 
-        <h2>🍴 GoodFoods</h2>
+    <h2>🍴 GoodFoods</h2>
 
-        <div>
+    <div class="nav-links">
 
-            <a href="home.jsp">Home</a>
-            <a href="CartServlet">Cart</a>
+        <a href="home.jsp">Home</a>
 
-        </div>
+        <a href="CartServlet">Cart</a>
 
-    </nav>
+        <%
+            if (user == null) {
+        %>
 
+            <a href="login.jsp">Login</a>
+
+        <%
+            } else {
+        %>
+
+            <div class="profile">
+
+                <button class="profile-btn">
+                    👤 <%= user.getUserName() %> ▼
+                </button>
+
+                <div class="dropdown">
+
+                    <a href="profile.jsp">My Profile</a>
+
+                    <a href="MyOrdersServlet">My Orders</a>
+
+                    <a href="<%= request.getContextPath() %>/LogoutServlet">
+                        Logout
+                    </a>
+
+                </div>
+
+            </div>
+
+        <%
+            }
+        %>
+
+    </div>
+
+</nav>
 </header>
 
 <h1 class="title">Checkout</h1>

@@ -13,31 +13,29 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/CheckOutServlet")
-public class CheckoutServlet extends HttpServlet{
-	
+public class CheckoutServlet extends HttpServlet {
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 
-        User user = (User) session.getAttribute("loggedInUser");
+		User user = (User) session.getAttribute("loggedInUser");
 
-        if (user == null) {
+		if (user == null) {
 
-            resp.sendRedirect("login.jsp");
+			resp.sendRedirect("login.jsp");
 
-            return;
-        }
+			return;
+		}
 
-        Cart cart = (Cart) session.getAttribute("cart");
+		Cart cart = (Cart) session.getAttribute("cart");
 
-        if (cart != null) {
+		if (cart != null) {
 
-            req.setAttribute("totalAmount",
-                    cart.getGrandTotal());
+			req.setAttribute("totalAmount", cart.getGrandTotal());
 
-        }
+		}
 
-        req.getRequestDispatcher("checkout.jsp")
-           .forward(req, resp);
-    }
+		req.getRequestDispatcher("checkout.jsp").forward(req, resp);
+	}
 }

@@ -14,13 +14,13 @@ import com.food.utility.DBConnection;
 
 
 public class MenuDAOImpl implements MenuDAO{
-	private static final String INSERT_QUERY = "INSERT INTO menu(restaurantId,itemName,description,price,isAvailable,category,createdAt,updatedAt,deletedAt)"
-			+ " VALUES(?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_QUERY =
+			"INSERT INTO menu(restaurantId,itemName,description,price,isAvailable,category,image,createdAt,updatedAt,deletedAt) VALUES(?,?,?,?,?,?,?,?,?,?)";
 	private static final String GET_MENU_BY_RESTID = "SELECT * FROM menu WHERE restaurantId=?";
 	private static final String GET_MENU_BY_CATEGORY = "SELECT * FROM menu WHERE category=?";
 	private static final String GET_ALL_QUERY = "SELECT * FROM menu";
-	private static final String UPDATE_QUERY = "UPDATE menu SET restaurantId=?, itemName=?, description=?, price=?, isAvailable=?, category=?,"
-			+ " updatedAt=?, deletedAt=? WHERE menuId=?";
+	private static final String UPDATE_QUERY =
+			"UPDATE menu SET restaurantId=?, itemName=?, description=?, price=?, isAvailable=?, category=?, image=?, updatedAt=?, deletedAt=? WHERE menuId=?";
 	private static final String DELETE_QUERY ="UPDATE menu SET deletedAt=? WHERE menuId=?";
 	private static final String GET_QUERY = "SELECT * FROM menu WHERE menuId=?";
 	private Connection con=null;
@@ -36,9 +36,10 @@ public class MenuDAOImpl implements MenuDAO{
             pstmt.setDouble(4, m.getPrice());
             pstmt.setByte(5, m.getIsAvailable());
             pstmt.setString(6, m.getCategory());
-            pstmt.setTimestamp(7, m.getCreatedAt());
-            pstmt.setTimestamp(8, m.getUpdatedAt());
-            pstmt.setTimestamp(9, m.getDeletedAt());
+            pstmt.setString(7, m.getImage());
+            pstmt.setTimestamp(8, m.getCreatedAt());
+            pstmt.setTimestamp(9, m.getUpdatedAt());
+            pstmt.setTimestamp(10, m.getDeletedAt());
 
             pstmt.executeUpdate();
 
@@ -62,9 +63,10 @@ public class MenuDAOImpl implements MenuDAO{
 		        pstmt.setDouble(4, m.getPrice());
 		        pstmt.setByte(5, m.getIsAvailable());
 		        pstmt.setString(6, m.getCategory());
-		        pstmt.setTimestamp(7, m.getUpdatedAt());
-		        pstmt.setTimestamp(8, m.getDeletedAt());
-		        pstmt.setInt(9, m.getMenuId());
+		        pstmt.setString(7, m.getImage());
+		        pstmt.setTimestamp(8, m.getUpdatedAt());
+		        pstmt.setTimestamp(9, m.getDeletedAt());
+		        pstmt.setInt(10, m.getMenuId());
 
 		        pstmt.executeUpdate();
 			} catch (SQLException e) {
@@ -189,11 +191,12 @@ public class MenuDAOImpl implements MenuDAO{
 		    double price = res.getDouble("price");
 		    byte isAvailable = res.getByte("isAvailable");
 		    String category = res.getString("category");
+		    String image = res.getString("image");		    
 		    Timestamp createdAt = res.getTimestamp("createdAt");
 		    Timestamp updatedAt = res.getTimestamp("updatedAt");
 		    Timestamp deletedAt = res.getTimestamp("deletedAt");
 
-		    Menu m = new Menu(menuId, restaurantId, itemName, description, price, isAvailable, category, createdAt, updatedAt, deletedAt);
+		    Menu m = new Menu(menuId, restaurantId, itemName, description, price, isAvailable, category, image, createdAt, updatedAt, deletedAt);
 		    return m;
 		}
 	}

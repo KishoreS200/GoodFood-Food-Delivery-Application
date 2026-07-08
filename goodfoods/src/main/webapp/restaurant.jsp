@@ -1,239 +1,384 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
-<%@ page import="java.util.List" %>
-<%@ page import="com.food.model.Restaurant" %>
+<%@ page import="java.util.List"%>
+<%@ page import="com.food.model.Restaurant"%>
+<%@ page import="com.food.model.User"%>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Restaurants</title>
+<meta charset="UTF-8">
+<title>Restaurants</title>
 
-    <style>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Segoe UI", sans-serif;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
+body {
+	background: #f5f7fb;
+}
 
-        body {
-            background: #f4f6f9;
-        }
+/* ================= NAVBAR ================= */
+header {
+	background: linear-gradient(135deg, #ff6b35, #ff914d);
+	padding: 16px 50px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, .15);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
 
-        /* Navbar */
+nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 
-        header {
-            background: linear-gradient(135deg, #ff6b35, #ff914d);
-            padding: 15px 40px;
-        }
+nav h2 {
+	color: #fff;
+	font-size: 34px;
+	font-weight: 700;
+	letter-spacing: .5px;
+}
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 25px;
+}
 
-        nav h2 {
-            color: white;
-            font-size: 28px;
-        }
+.nav-links a {
+	color: white;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: 600;
+	transition: .3s;
+}
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: bold;
-        }
+.nav-links a:hover {
+	color: #fff2b2;
+	transform: translateY(-2px);
+}
 
-        nav a:hover {
-            color: #ffe082;
-        }
+/* ================= PROFILE ================= */
+.profile {
+	position: relative;
+}
 
-        /* Title */
+.profile-btn {
+	background: #fff;
+	color: #ff6b35;
+	border: none;
+	padding: 10px 18px;
+	border-radius: 30px;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 700;
+	transition: .3s;
+}
 
-        .title {
-            text-align: center;
-            color: #ff6b35;
-            margin: 30px 0;
-        }
+.profile-btn:hover {
+	background: #fff5ef;
+}
 
-        /* Grid */
+.dropdown {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 115%;
+	width: 210px;
+	background: #fff;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, .18);
+}
 
-        .container {
-            width: 90%;
-            margin: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
+.dropdown a {
+	display: block;
+	padding: 14px 18px;
+	text-decoration: none;
+	color: #444;
+	margin: 0;
+	transition: .25s;
+}
 
-        /* Card */
+.dropdown a:hover {
+	background: #fff4ed;
+	color: #ff6b35;
+	padding-left: 24px;
+}
 
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-            transition: 0.3s;
-        }
+.profile:hover .dropdown {
+	display: block;
+}
 
-        .card:hover {
-            transform: translateY(-8px);
-        }
+/* ================= TITLE ================= */
+.title {
+	text-align: center;
+	color: #ff6b35;
+	margin: 40px 0;
+	font-size: 50px;
+	font-weight: 700;
+}
 
-        .card h2 {
-            color: #ff6b35;
-            margin-bottom: 15px;
-        }
+/* ================= GRID ================= */
+.container {
+	width: 92%;
+	margin: 40px auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 350px));
+	justify-content: center;
+	gap: 30px;
+}
 
-        .card p {
-            margin: 10px 0;
-        }
+/* ================= CARD ================= */
+.card {
+	background: white;
+	border-radius: 22px;
+	overflow: hidden;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
+	transition: .35s;
+	display: flex;
+	flex-direction: column;
+	width: 350px;
+	min-height: 540px;
+	position: relative;
+}
 
-        .open {
-            color: green;
-            font-weight: bold;
-        }
+.card:hover {
+	transform: translateY(-12px);
+	box-shadow: 0 20px 45px rgba(0, 0, 0, .20);
+}
 
-        .closed {
-            color: red;
-            font-weight: bold;
-        }
+/* ================= IMAGE ================= */
+.restaurant-img {
+	width: 100%;
+	height: 210px;
+	object-fit: cover;
+	transition: .4s;
+}
 
-        input[type="submit"] {
-            margin-top: 15px;
-            background: #ff6b35;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: 0.3s;
-        }
+.card:hover .restaurant-img {
+	transform: scale(1.06);
+}
 
-        input[type="submit"]:hover {
-            background: #e65100;
-        }
+/* ================= CONTENT ================= */
+.card-content {
+	padding: 22px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
 
-        .empty {
-            text-align: center;
-            color: red;
-            margin-top: 40px;
-        }
+.card h2 {
+	color: #ff6b35;
+	font-size: 24px;
+	margin-bottom: 12px;
+}
 
-    </style>
+.card p {
+	font-size: 16px;
+	margin: 8px 0;
+	color: #444;
+}
+
+.card strong {
+	color: #222;
+}
+
+/* ================= STATUS ================= */
+.open {
+	color: #18a558;
+	font-weight: bold;
+}
+
+.closed {
+	color: #e53935;
+	font-weight: bold;
+}
+
+/* ================= BUTTON ================= */
+.card form {
+	margin-top: auto;
+}
+
+.card input[type="submit"] {
+	width: 170px;
+	padding: 14px;
+	background: linear-gradient(135deg, #ff6b35, #ff914d);
+	color: white;
+	border: none;
+	border-radius: 12px;
+	font-size: 17px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: .3s;
+}
+
+.card input[type="submit"]:hover {
+	transform: scale(1.05);
+	box-shadow: 0 10px 25px rgba(255, 107, 53, .35);
+}
+
+/* ================= EMPTY ================= */
+.empty {
+	text-align: center;
+	color: #ff3b3b;
+	margin-top: 60px;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.rating-badge {
+	display: inline-block;
+	background: #1abc54;
+	color: #fff;
+	padding: 5px 12px;
+	border-radius: 20px;
+	font-weight: bold;
+	font-size: 14px;
+}
+</style>
 
 </head>
 
 <body>
 
-<header>
+	<header>
+		<%
+		User user = (User) session.getAttribute("loggedInUser");
+		%>
 
-    <nav>
+		<nav>
 
-        <h2>🍴 GoodFoods</h2>
+			<h2>🍴 GoodFoods</h2>
 
-        <div>
-            <a href="home.jsp">Home</a>
-            <a href="CartServlet">Cart</a>
-        </div>
+			<div class="nav-links">
 
-    </nav>
+				<a href="home.jsp">Home</a> <a href="CartServlet">Cart</a>
 
-</header>
+				<%
+				if (user == null) {
+				%>
 
-<h1 class="title">🍽 Explore Restaurants</h1>
+				<a href="login.jsp">Login</a>
 
-<div class="container">
+				<%
+				} else {
+				%>
 
-<%
-    List<Restaurant> restaurantList =
-        (List<Restaurant>) request.getAttribute("allRestaurants");
+				<div class="profile">
 
-    if (restaurantList != null && !restaurantList.isEmpty()) {
+					<button class="profile-btn">
+						👤
+						<%=user.getUserName()%>
+						▼
+					</button>
 
-        for (Restaurant restaurant : restaurantList) {
-%>
+					<div class="dropdown">
 
-    <div class="card">
+						<a href="profile.jsp">My Profile</a> <a href="MyOrdersServlet">My
+							Orders</a> <a href="<%=request.getContextPath()%>/LogoutServlet">
+							Logout </a>
 
-        <h2><%= restaurant.getName() %></h2>
+					</div>
 
-        <p>
-            <strong>🍜 Cuisine :</strong>
-            <%= restaurant.getCuisineType() %>
-        </p>
+				</div>
 
-        <p>
-            <strong>⭐ Rating :</strong>
-            <%= restaurant.getRating() %>
-        </p>
+				<%
+				}
+				%>
 
-        <p>
-            <strong>🚚 Delivery :</strong>
-            <%= restaurant.getDeliveryTime() %> mins
-        </p>
+			</div>
 
-        <p>
-            <strong>📍 Address :</strong>
-            <%= restaurant.getAddress() %>
-        </p>
+		</nav>
+	</header>
 
-        <p>
+	<h1 class="title">🍽 Explore Restaurants</h1>
 
-            <strong>Status :</strong>
+	<div class="container">
 
-            <%
-                if (restaurant.getIsActive() == 1) {
-            %>
+		<%
+		List<Restaurant> restaurantList = (List<Restaurant>) request.getAttribute("allRestaurants");
 
-                <span class="open">🟢 Open</span>
+		if (restaurantList != null && !restaurantList.isEmpty()) {
 
-            <%
-                } else {
-            %>
+			for (Restaurant restaurant : restaurantList) {
+		%>
 
-                <span class="closed">🔴 Closed</span>
+		<div class="card">
 
-            <%
-                }
-            %>
+			<img src="images/restaurants/<%=restaurant.getImage()%>"
+				alt="<%=restaurant.getName()%>" class="restaurant-img">
 
-        </p>
+			<div class="card-content">
 
-        <form action="MenuServlet" method="get">
+				<h2><%=restaurant.getName()%></h2>
 
-            <input
-                type="hidden"
-                name="restaurantId"
-                value="<%= restaurant.getRestaurantId() %>">
+				<p>
+					<strong>🍜 Cuisine :</strong>
+					<%=restaurant.getCuisineType()%>
+				</p>
 
-            <input
-                type="submit"
-                value="📖 View Menu">
+				<p>
+					<strong><span class="rating-badge">⭐<%=restaurant.getRating()%></span></strong>
+				</p>
 
-        </form>
+				<p>
+					<strong>🚚 Delivery :</strong>
+					<%=restaurant.getDeliveryTime()%>
+					mins
+				</p>
 
-    </div>
+				<p>
+					<strong>📍 Address :</strong>
+					<%=restaurant.getAddress()%>
+				</p>
 
-<%
-        }
-    } else {
-%>
+				<p>
+					<strong>Status :</strong>
 
-</div>
+					<%
+					if (restaurant.getIsActive() == 1) {
+					%>
+					<span class="open">🟢 Open</span>
+					<%
+					} else {
+					%>
+					<span class="closed">🔴 Closed</span>
+					<%
+					}
+					%>
 
-<h2 class="empty">No Restaurants Available</h2>
+				</p>
 
-<%
-    }
-%>
+				<form action="MenuServlet" method="get">
+					<input type="hidden" name="restaurantId"
+						value="<%=restaurant.getRestaurantId()%>"> <input
+						type="submit" value="📖 View Menu">
+				</form>
+
+			</div>
+		</div>
+
+		<%
+		}
+		} else {
+		%>
+
+	</div>
+
+	<h2 class="empty">No Restaurants Available</h2>
+
+	<%
+	}
+	%>
 
 </body>
 </html>

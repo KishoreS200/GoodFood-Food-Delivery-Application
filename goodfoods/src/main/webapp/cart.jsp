@@ -70,51 +70,50 @@ table {
 }
 
 /* Quantity Controls */
-
 .qty-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
 }
 
 .qty-btn {
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 50%;
-    background: #ff6b35;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+	width: 38px;
+	height: 38px;
+	border: none;
+	border-radius: 50%;
+	background: #ff6b35;
+	color: white;
+	font-size: 24px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: 0.3s;
 }
 
 .qty-btn:hover {
-    background: #e65100;
-    transform: scale(1.08);
+	background: #e65100;
+	transform: scale(1.08);
 }
 
 .qty-input {
-    width: 45px;
-    height: 35px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    background: #fff;
-    outline: none;
+	width: 45px;
+	height: 35px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	background: #fff;
+	outline: none;
 }
 
 .qty-input:focus {
-    border-color: #ff6b35;
+	border-color: #ff6b35;
 }
 
 td form {
-    margin: 0;
+	margin: 0;
 }
 
 th {
@@ -129,15 +128,13 @@ td {
 	border-bottom: 1px solid #ddd;
 }
 
-td form{
-    margin:0;
+td form {
+	margin: 0;
 }
-
 
 tr:hover {
 	background: #fff7f2;
 }
-
 
 .remove-btn {
 	background: #dc3545;
@@ -187,6 +184,60 @@ tr:hover {
 	margin-top: 40px;
 	font-size: 22px;
 }
+
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.profile {
+	position: relative;
+	display: inline-block;
+}
+
+.profile-btn {
+	background: white;
+	color: #ff6b35;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 25px;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 15px;
+}
+
+.profile-btn:hover {
+	background: #fff3ec;
+}
+
+.dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	width: 180px;
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+	overflow: hidden;
+	z-index: 1000;
+}
+
+.dropdown a {
+	display: block;
+	padding: 12px 15px;
+	color: #333;
+	text-decoration: none;
+}
+
+.dropdown a:hover {
+	background: #fff5f0;
+}
+
+.profile:hover .dropdown {
+	display: block;
+}
 </style>
 
 </head>
@@ -195,31 +246,66 @@ tr:hover {
 
 	<header>
 
+		<%@ page import="com.food.model.User"%>
+
+		<%
+		User user = (User) session.getAttribute("loggedInUser");
+		Integer restaurantId = (Integer) session.getAttribute("restaurantId");
+		%>
+
 		<nav>
 
 			<h2>🛒 GoodFoods</h2>
 
-			<div>
-			<% Integer restaurantId = (Integer) session.getAttribute("restaurantId");%>
+			<div class="nav-links">
 
-    <a href="home.jsp">Home</a>
+				<a href="home.jsp">Home</a> <a href="RestaurantServlet">Restaurants</a>
 
-    <a href="RestaurantServlet">Restaurants</a>
+				<%
+				if (restaurantId != null) {
+				%>
 
-    <%
-    	
-        if (restaurantId != null) {
-    %>
+				<a href="MenuServlet?restaurantId=<%=restaurantId%>"> Menu </a>
 
-        <a href="MenuServlet?restaurantId=<%= restaurantId %>">
-            Menu
-        </a>
+				<%
+				}
+				%>
 
-    <%
-        }
-    %>
+				<a href="CartServlet">Cart</a>
 
-</div>
+				<%
+				if (user == null) {
+				%>
+
+				<a href="login.jsp">Login</a>
+
+				<%
+				} else {
+				%>
+
+				<div class="profile">
+
+					<button class="profile-btn">
+						👤
+						<%=user.getUserName()%>
+						▼
+					</button>
+
+					<div class="dropdown">
+
+						<a href="profile.jsp">My Profile</a> <a href="MyOrdersServlet">My
+							Orders</a> <a href="<%=request.getContextPath()%>/LogoutServlet">
+							Logout </a>
+
+					</div>
+
+				</div>
+
+				<%
+				}
+				%>
+
+			</div>
 
 		</nav>
 
@@ -262,45 +348,31 @@ tr:hover {
 				<td>₹<%=item.getPrice()%>
 				</td>
 
-   <td>
+				<td>
 
-    <form action="CartServlet" method="post" class="qty-form">
+					<form action="CartServlet" method="post" class="qty-form">
 
-        <input type="hidden" name="action" value="update">
+						<input type="hidden" name="action" value="update"> <input
+							type="hidden" name="menuId" value="<%=item.getMenuId()%>">
 
-        <input type="hidden"
-               name="menuId"
-               value="<%= item.getMenuId() %>">
+						<input type="hidden" name="restaurantId"
+							value="<%=item.getRestaurantId()%>">
 
-        <input type="hidden"
-               name="restaurantId"
-               value="<%= item.getRestaurantId() %>">
+						<button type="button" class="qty-btn" onclick="changeQty(this,-1)">
+							-</button>
 
-    <button type="button"
-            class="qty-btn"
-            onclick="changeQty(this,-1)">
-        -
-    </button>
+						<input type="text" class="qty-input" name="quantity"
+							value="<%=item.getQuantity()%>" readonly>
 
-    <input type="text"
-           class="qty-input"
-           name="quantity"
-           value="<%= item.getQuantity() %>"
-           readonly>
+						<button type="button" class="qty-btn" onclick="changeQty(this,1)">
+							+</button>
 
-    <button type="button"
-            class="qty-btn"
-            onclick="changeQty(this,1)">
-        +
-    </button>
+					</form>
 
-</form>
+				</td>
 
-</td>
-
-<td>
-    ₹<%= item.getItemTotal() %>
-</td>
+				<td>₹<%=item.getItemTotal()%>
+				</td>
 
 
 				<td>
@@ -352,35 +424,33 @@ tr:hover {
 		<h2 class="empty">🛒 Your Cart Is Empty</h2>
 
 		<%
-}
-
-%>
+		}
+		%>
 
 	</div>
-<script>
-function updateCart(input) {
-    input.form.submit();
-}
-function changeQty(button, change){
+	<script>
+		function updateCart(input) {
+			input.form.submit();
+		}
+		function changeQty(button, change) {
 
-    let form = button.parentElement;
+			let form = button.parentElement;
 
-    let qtyInput = form.querySelector(".qty-input");
+			let qtyInput = form.querySelector(".qty-input");
 
-    let qty = parseInt(qtyInput.value);
+			let qty = parseInt(qtyInput.value);
 
-    qty += change;
+			qty += change;
 
-    if(qty < 1){
-        qty = 1;
-    }
+			if (qty < 1) {
+				qty = 1;
+			}
 
-    qtyInput.value = qty;
+			qtyInput.value = qty;
 
-    form.submit();
-}
-
-</script>
+			form.submit();
+		}
+	</script>
 
 </body>
 
