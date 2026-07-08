@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ page import="com.food.model.User"%>
-<%@ page import="com.food.model.Cart" %>
+<%@ page import="com.food.model.Cart"%>
 
 <!DOCTYPE html>
 <html>
@@ -12,363 +12,325 @@
 <title>Checkout</title>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",sans-serif;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Segoe UI", sans-serif;
 }
 
-body{
-    background:#f4f6f9;
+body {
+	background: #f4f6f9;
 }
 
 /* Navbar */
-
-header{
-    background:linear-gradient(135deg,#ff6b35,#ff914d);
-    padding:15px 40px;
+header {
+	background: linear-gradient(135deg, #ff6b35, #ff914d);
+	padding: 15px 40px;
 }
 
-nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-nav h2{
-    color:white;
-    font-size:28px;
+nav h2 {
+	color: white;
+	font-size: 28px;
 }
 
-nav a{
-    color:white;
-    text-decoration:none;
-    margin-left:20px;
-    font-weight:bold;
+nav a {
+	color: white;
+	text-decoration: none;
+	margin-left: 20px;
+	font-weight: bold;
 }
 
-nav a:hover{
-    color:#ffe082;
+nav a:hover {
+	color: #ffe082;
 }
 
 /* Title */
-
-.title{
-    text-align:center;
-    color:#ff6b35;
-    margin:30px 0;
+.title {
+	text-align: center;
+	color: #ff6b35;
+	margin: 30px 0;
 }
 
 /* Checkout Card */
-
-.container{
-    width:700px;
-    margin:0 auto 40px;
+.container {
+	width: 700px;
+	margin: 0 auto 40px;
 }
 
-.card{
-    background:white;
-    border-radius:15px;
-    padding:30px;
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+.card {
+	background: white;
+	border-radius: 15px;
+	padding: 30px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
 }
 
-.section-title{
-    color:#ff6b35;
-    margin-bottom:15px;
-    border-bottom:2px solid #ff6b35;
-    padding-bottom:8px;
+.section-title {
+	color: #ff6b35;
+	margin-bottom: 15px;
+	border-bottom: 2px solid #ff6b35;
+	padding-bottom: 8px;
 }
 
-.info{
-    margin:15px 0;
-    font-size:17px;
+.info {
+	margin: 15px 0;
+	font-size: 17px;
 }
 
-textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:15px;
-    resize:none;
+textarea {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 15px;
+	resize: none;
 }
 
-textarea:focus{
-    outline:none;
-    border-color:#ff6b35;
+textarea:focus {
+	outline: none;
+	border-color: #ff6b35;
 }
 
-.payment-option{
-    margin:15px 0;
-    font-size:17px;
+.payment-option {
+	margin: 15px 0;
+	font-size: 17px;
 }
 
-.payment-option label{
-    cursor:pointer;
+.payment-option label {
+	cursor: pointer;
 }
 
-.total-card{
-    margin-top:30px;
-    background:#fff7f2;
-    padding:20px;
-    border-radius:10px;
-    text-align:center;
+.total-card {
+	margin-top: 30px;
+	background: #fff7f2;
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
 }
 
-.total-card h2{
-    color:#28a745;
-    margin-bottom:10px;
+.total-card h2 {
+	color: #28a745;
+	margin-bottom: 10px;
 }
 
-.amount{
-    font-size:36px;
-    font-weight:bold;
-    color:#000;
+.amount {
+	font-size: 36px;
+	font-weight: bold;
+	color: #000;
 }
 
-.place-btn{
-    width:100%;
-    margin-top:25px;
-    padding:15px;
-    border:none;
-    border-radius:8px;
-    background:#28a745;
-    color:white;
-    font-size:18px;
-    cursor:pointer;
-    transition:.3s;
+.place-btn {
+	width: 100%;
+	margin-top: 25px;
+	padding: 15px;
+	border: none;
+	border-radius: 8px;
+	background: #28a745;
+	color: white;
+	font-size: 18px;
+	cursor: pointer;
+	transition: .3s;
 }
 
-.place-btn:hover{
-    background:#218838;
+.place-btn:hover {
+	background: #218838;
 }
 
-.nav-links{
-    display:flex;
-    align-items:center;
-    gap:20px;
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 20px;
 }
 
-.profile{
-    position:relative;
-    display:inline-block;
+.profile {
+	position: relative;
+	display: inline-block;
 }
 
-.profile-btn{
-    background:white;
-    color:#ff6b35;
-    border:none;
-    padding:8px 15px;
-    border-radius:25px;
-    font-weight:bold;
-    cursor:pointer;
-    font-size:15px;
+.profile-btn {
+	background: white;
+	color: #ff6b35;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 25px;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 15px;
 }
 
-.profile-btn:hover{
-    background:#fff3ec;
+.profile-btn:hover {
+	background: #fff3ec;
 }
 
-.dropdown{
-    display:none;
-    position:absolute;
-    top:100%;
-    right:0;
-    width:180px;
-    background:white;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,.2);
-    overflow:hidden;
-    z-index:1000;
+.dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	width: 180px;
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+	overflow: hidden;
+	z-index: 1000;
 }
 
-.dropdown a{
-    display:block;
-    padding:12px 15px;
-    color:#333;
-    text-decoration:none;
+.dropdown a {
+	display: block;
+	padding: 12px 15px;
+	color: #333;
+	text-decoration: none;
 }
 
-.dropdown a:hover{
-    background:#fff5f0;
+.dropdown a:hover {
+	background: #fff5f0;
 }
 
-.profile:hover .dropdown{
-    display:block;
+.profile:hover .dropdown {
+	display: block;
 }
-
 </style>
 
 </head>
 
 <body>
 
-<%
-    User user = (User)session.getAttribute("loggedInUser");
+	<%
+	User user = (User) session.getAttribute("loggedInUser");
 
-    Cart cart=(Cart)session.getAttribute("cart");
-    
-    double totalAmount=0;
-    if(cart!=null)
-    {
-    	totalAmount=cart.getGrandTotal();
-    }
-    
-%>
+	Cart cart = (Cart) session.getAttribute("cart");
 
-<header>
+	double totalAmount = 0;
+	if (cart != null) {
+		totalAmount = cart.getGrandTotal();
+	}
+	%>
 
-<nav>
+	<header>
 
-    <h2>🍴 GoodFoods</h2>
+		<nav>
 
-    <div class="nav-links">
+			<h2>🍴 GoodFoods</h2>
 
-        <a href="home.jsp">Home</a>
+			<div class="nav-links">
 
-        <a href="CartServlet">Cart</a>
+				<a href="home.jsp">Home</a> <a href="CartServlet">Cart</a>
 
-        <%
-            if (user == null) {
-        %>
+				<%
+				if (user == null) {
+				%>
 
-            <a href="login.jsp">Login</a>
+				<a href="login.jsp">Login</a>
 
-        <%
-            } else {
-        %>
+				<%
+				} else {
+				%>
 
-            <div class="profile">
+				<div class="profile">
 
-                <button class="profile-btn">
-                    👤 <%= user.getUserName() %> ▼
-                </button>
+					<button class="profile-btn">
+						👤
+						<%=user.getUserName()%>
+						▼
+					</button>
 
-                <div class="dropdown">
+					<div class="dropdown">
 
-                    <a href="profile.jsp">My Profile</a>
+						<a href="profile.jsp">My Profile</a> <a href="MyOrdersServlet">My
+							Orders</a> <a href="<%=request.getContextPath()%>/LogoutServlet">
+							Logout </a>
 
-                    <a href="MyOrdersServlet">My Orders</a>
+					</div>
 
-                    <a href="<%= request.getContextPath() %>/LogoutServlet">
-                        Logout
-                    </a>
+				</div>
 
-                </div>
+				<%
+				}
+				%>
 
-            </div>
+			</div>
 
-        <%
-            }
-        %>
+		</nav>
+	</header>
 
-    </div>
+	<h1 class="title">Checkout</h1>
 
-</nav>
-</header>
+	<div class="container">
 
-<h1 class="title">Checkout</h1>
+		<div class="card">
 
-<div class="container">
+			<form action="OrderServlet" method="post">
 
-    <div class="card">
+				<h2 class="section-title">Customer Details</h2>
 
-        <form action="OrderServlet" method="post">
+				<div class="info">
+					<strong>Name :</strong>
+					<%=user.getUserName()%>
+				</div>
 
-            <h2 class="section-title">Customer Details</h2>
+				<div class="info">
+					<strong>Email :</strong>
+					<%=user.getEmail()%>
+				</div>
 
-            <div class="info">
-                <strong>Name :</strong>
-                <%= user.getUserName() %>
-            </div>
+				<br>
 
-            <div class="info">
-                <strong>Email :</strong>
-                <%= user.getEmail() %>
-            </div>
+				<h2 class="section-title">Delivery Address</h2>
 
-            <br>
+				<textarea name="address" rows="4" required><%=user.getAddress()%></textarea>
 
-            <h2 class="section-title">Delivery Address</h2>
+				<br>
+				<br>
 
-            <textarea
-                name="address"
-                rows="4"
-                required><%= user.getAddress() %></textarea>
+				<h2 class="section-title">Payment Method</h2>
 
-            <br><br>
+				<div class="payment-option">
+					<label> <input type="radio" name="paymentMethod"
+						value="cash" required> 💵 Cash On Delivery
+					</label>
+				</div>
 
-            <h2 class="section-title">Payment Method</h2>
+				<div class="payment-option">
+					<label> <input type="radio" name="paymentMethod"
+						value="upi"> 📱 UPI
+					</label>
+				</div>
 
-            <div class="payment-option">
+				<div class="payment-option">
+					<label> <input type="radio" name="paymentMethod"
+						value="card"> 💳 Credit / Debit Card
+					</label>
+				</div>
 
-                <label>
+				<div class="payment-option">
+					<label> <input type="radio" name="paymentMethod"
+						value="netbanking"> 🏦 Net Banking
+					</label>
+				</div>
 
-                    <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="Cash On Delivery"
-                        required>
+				<div class="total-card">
 
-                    💵 Cash On Delivery
+					<h2>Total Amount</h2>
 
-                </label>
+					<div class="amount">
+						₹<%=totalAmount%>
+					</div>
 
-            </div>
+				</div>
 
-            <div class="payment-option">
+				<input class="place-btn" type="submit" value="Place Order">
 
-                <label>
+			</form>
 
-                    <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="UPI">
+		</div>
 
-                    📱 UPI
-
-                </label>
-
-            </div>
-
-            <div class="payment-option">
-
-                <label>
-
-                    <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="Card">
-
-                    💳 Credit / Debit Card
-
-                </label>
-
-            </div>
-
-            <div class="total-card">
-
-                <h2>Total Amount</h2>
-
-                <div class="amount">
-                    ₹<%= totalAmount %>
-                </div>
-
-            </div>
-
-            <input
-                class="place-btn"
-                type="submit"
-                value="Place Order">
-
-        </form>
-
-    </div>
-
-</div>
+	</div>
 
 </body>
 

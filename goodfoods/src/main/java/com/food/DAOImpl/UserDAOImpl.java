@@ -19,6 +19,7 @@ public class UserDAOImpl implements UserDAO {
 			+ "password, address, role, lastLogged) VALUES(?,?,?,?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE user SET userName=?, email=?, password=?, "
 			+ "address=?, lastLogged=? WHERE userId=?";
+	private static final String UPDATE_PROFILE_QUERY = "UPDATE user SET userName=?, address=? WHERE userId=?";
 	private static final String GET_QUERY = "SELECT * FROM user WHERE userId=?";
 	private static final String DELETE_QUERY = "DELETE FROM user WHERE userId=?";
 	private static final String GET_ALL_QUERY = "SELECT * FROM user";
@@ -64,8 +65,26 @@ public class UserDAOImpl implements UserDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
+
+	@Override
+	public void updateProfile(User user) {
+		Connection con = DBConnection.getConnection();
+		try {
+			PreparedStatement pstmt = con.prepareStatement(UPDATE_PROFILE_QUERY);
+
+			pstmt.setString(1, user.getUserName());
+			pstmt.setString(2, user.getAddress());
+			pstmt.setInt(3, user.getUserId());
+
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 	@Override
 	public void deleteUser(int userId) {
@@ -156,38 +175,38 @@ public class UserDAOImpl implements UserDAO {
 
 		return user;
 	}
-	
+
 	public User getUserByEmail(String email) {
 
-	    Connection con = DBConnection.getConnection();
+		Connection con = DBConnection.getConnection();
 
-	    User user = null;
+		User user = null;
 
-	    try {
+		try {
 
-	        PreparedStatement pstmt = con.prepareStatement(GET_USER_BY_EMAIL);
+			PreparedStatement pstmt = con.prepareStatement(GET_USER_BY_EMAIL);
 
-	        pstmt.setString(1, email);
+			pstmt.setString(1, email);
 
-	        ResultSet rs = pstmt.executeQuery();
+			ResultSet rs = pstmt.executeQuery();
 
-	        if (rs.next()) {
+			if (rs.next()) {
 
-	            user = new User();
+				user = new User();
 
-	            user.setUserId(rs.getInt("userId"));
-	            user.setUserName(rs.getString("userName"));
-	            user.setEmail(rs.getString("email"));
-	            user.setPassword(rs.getString("password"));
-	            user.setAddress(rs.getString("address"));
+				user.setUserId(rs.getInt("userId"));
+				user.setUserName(rs.getString("userName"));
+				user.setEmail(rs.getString("email"));
+				user.setPassword(rs.getString("password"));
+				user.setAddress(rs.getString("address"));
 
-	        }
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-	    return user;
+		return user;
 	}
 
 	public static User getUserAllFromResultSet(ResultSet res) throws SQLException {

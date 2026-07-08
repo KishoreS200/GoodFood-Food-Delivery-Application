@@ -44,11 +44,18 @@ public class OrderTableDAOImpl implements OrderTableDAO {
 
 			pstmt.executeUpdate();
 
+			System.out.println("Order inserted successfully");
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			if (rs.next()) {
-				return rs.getInt(1);
+			    int id = rs.getInt(1);
+			    System.out.println("Generated Order ID = " + id);
+			    return id;
 			}
+
+			System.out.println("Generated key not found!");
+			return 0;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

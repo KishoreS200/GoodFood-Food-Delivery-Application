@@ -8,6 +8,7 @@ import com.food.model.User;
 public interface UserDAO {
 	void addUser(User u);
 	void updateUser(User u);
+	void updateProfile(User u);
 	void deleteUser(int userId);
 	User getUser(int userId);
 	List<User> getAllUser();

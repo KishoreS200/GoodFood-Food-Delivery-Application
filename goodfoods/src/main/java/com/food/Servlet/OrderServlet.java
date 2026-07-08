@@ -3,7 +3,6 @@ package com.food.Servlet;
 import java.io.IOException;
 import java.sql.Timestamp;
 
-import com.food.DAO.OrderTableDAO;
 import com.food.DAO.OrderItemDAO;
 import com.food.DAOImpl.OrderItemDAOImpl;
 import com.food.DAOImpl.OrderTableDAOImpl;
@@ -59,6 +58,9 @@ public class OrderServlet extends HttpServlet {
 		OrderTableDAOImpl orderDAO = new OrderTableDAOImpl();
 
 		int orderId = orderDAO.addOrder(order);
+		if (orderId <= 0) {
+		    throw new RuntimeException("Order creation failed.");
+		}
 
 
 		OrderItemDAO orderItemDAO = new OrderItemDAOImpl();
