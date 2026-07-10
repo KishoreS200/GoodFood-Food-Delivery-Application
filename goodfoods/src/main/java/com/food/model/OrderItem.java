@@ -14,6 +14,19 @@ public class OrderItem {
 		super();
 	}
 
+	public OrderItem(int orderItemId, int orderId, int menuId, int quantity, double itemTotal,
+			String menuName, String image) {
+		super();
+		this.orderItemId = orderItemId;
+		this.orderId = orderId;
+		this.menuId = menuId;
+		this.quantity = quantity;
+		this.itemTotal = itemTotal;
+		this.menuName = menuName;
+		this.image = image;
+	}
+	
+
 	public OrderItem(int orderItemId, int orderId, int menuId, int quantity, double itemTotal) {
 		super();
 		this.orderItemId = orderItemId;
@@ -81,7 +94,10 @@ public class OrderItem {
 
 	@Override
 	public String toString() {
-		return "OrderItem [orderItemId=" + orderItemId + ", orderId=" + orderId + ", menuId=" + menuId + ", quantity="
-				+ quantity + ", itemTotal=" + itemTotal + ", menuName=" + menuName + ", image=" + image + "]";
+		return "OrderItem [orderItemId=" + orderItemId + ", orderId=" + orderId + ", menuId="
+				+ menuId + ", quantity=" + quantity + ", itemTotal=" + itemTotal + ", menuName=" + menuName + ", image="
+				+ image + "]";
 	}
+
+	
 }

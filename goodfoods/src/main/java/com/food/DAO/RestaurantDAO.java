@@ -10,5 +10,5 @@ public interface RestaurantDAO {
 	void deleteRestaurant(int restaurantId);
 	Restaurant getRestaurant(int resrestaurantId);
 	List<Restaurant> getAllRestaurant();
-
+	int getRestaurantCount();
 }

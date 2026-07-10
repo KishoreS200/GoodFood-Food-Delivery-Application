@@ -11,6 +11,7 @@ public interface UserDAO {
 	void updateProfile(User u);
 	void deleteUser(int userId);
 	User getUser(int userId);
-	List<User> getAllUser();
+	List<User> getAllUsers();
 	User getUserByEmail(String email);
+	int getCustomerCount();
 }

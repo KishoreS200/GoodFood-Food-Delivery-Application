@@ -117,20 +117,30 @@ public class OrderItemDAOImpl implements OrderItemDAO {
 
 	@Override
 	public List<OrderItem> getOrderByOrderId(int orderId) {
-		con = DBConnection.getConnection();
-		List<OrderItem> id = new ArrayList<>();
-		try {
-			PreparedStatement pstmt = con.prepareStatement(GET_QUERY_BY_ORDERID);
-			pstmt.setInt(1, orderId);
 
-			ResultSet res = pstmt.executeQuery();
-			while (res.next()) {
-				id.add(getOrderItemsAllFromResultSet(res));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return id;
+	    con = DBConnection.getConnection();
+
+	    List<OrderItem> list = new ArrayList<>();
+
+	    try {
+
+	        PreparedStatement pstmt = con.prepareStatement(GET_QUERY_BY_ORDERID);
+
+	        pstmt.setInt(1, orderId);
+
+	        ResultSet res = pstmt.executeQuery();
+
+	        while (res.next()) {
+
+	            list.add(getOrderItemsAllFromResultSet(res));
+
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
 	}
 
 	@Override
@@ -175,8 +185,7 @@ public class OrderItemDAOImpl implements OrderItemDAO {
 		oi.setMenuId(res.getInt("menuId"));
 		oi.setQuantity(res.getInt("quantity"));
 		oi.setItemTotal(res.getDouble("itemTotal"));
-
-		oi.setMenuName(res.getString("itemName"));
+		 oi.setMenuName(res.getString("itemName"));
 		oi.setImage(res.getString("image"));
 
 		return oi;

@@ -12,4 +12,5 @@ public interface MenuDAO {
 	List<Menu> getAllMenu();
 	List<Menu> getMenusByRestaurantId(int restaurantId);
 	List<Menu> getMenusByCategory(String category);
+	int getMenuCount();
 }

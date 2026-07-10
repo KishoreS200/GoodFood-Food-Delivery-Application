@@ -25,6 +25,7 @@ public class UserDAOImpl implements UserDAO {
 	private static final String GET_ALL_QUERY = "SELECT * FROM user";
 	private static final String GET_USER_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
 	private static final String LOGIN_QUERY = "SELECT * FROM user WHERE email=? AND password=?";
+	private static final String COUNT_QUERY = "SELECT COUNT(*) FROM user WHERE role='customer'";
 
 	@Override
 	public void addUser(User u) {
@@ -83,8 +84,6 @@ public class UserDAOImpl implements UserDAO {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	@Override
 	public void deleteUser(int userId) {
@@ -129,7 +128,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public List<User> getAllUser() {
+	public List<User> getAllUsers() {
 		Connection con = DBConnection.getConnection();
 		List<User> list = new ArrayList<>();
 		try {
@@ -199,6 +198,7 @@ public class UserDAOImpl implements UserDAO {
 				user.setEmail(rs.getString("email"));
 				user.setPassword(rs.getString("password"));
 				user.setAddress(rs.getString("address"));
+				user.setRole(rs.getString("role"));
 
 			}
 
@@ -221,5 +221,28 @@ public class UserDAOImpl implements UserDAO {
 
 		User u = new User(id, name, email, password, address, role, currentDate, lastLogged);
 		return u;
+	}
+	@Override
+	public int getCustomerCount() {
+
+	    int count = 0;
+
+	    Connection con = DBConnection.getConnection();
+
+	    try {
+
+	        PreparedStatement pstmt = con.prepareStatement(COUNT_QUERY);
+
+	        ResultSet rs = pstmt.executeQuery();
+
+	        if(rs.next()) {
+	            count = rs.getInt(1);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return count;
 	}
 }

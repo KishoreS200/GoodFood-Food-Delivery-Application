@@ -13,4 +13,6 @@ public interface OrderTableDAO {
 	List<OrderTable> getOrderByRestaurantId(int restaurantId);
 	void deleteOrder(int orderId);
 	List<OrderTable> getOrderByStatus(String status);
+	void updateOrderStatus(int orderId, String status);
+	int getOrderCount();
 }

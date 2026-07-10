@@ -23,6 +23,8 @@ public class OrderTableDAOImpl implements OrderTableDAO {
 	private static final String GET_QUERY_BY_RESID = "SELECT * FROM ordertable WHERE restaurantId = ?";
 	private static final String DELETE_QUERY = "DELETE FROM ordertable WHERE orderId=?";
 	private static final String GET_QUERY_BY_STATUS = "SELECT * FROM ordertable WHERE status = ?";
+	private static final String UPDATE_STATUS_QUERY = "UPDATE ordertable SET status=? WHERE orderId=?";
+	private static final String COUNT_QUERY = "SELECT COUNT(*) FROM ordertable";
 	private static Connection con = null;
 
 	@Override
@@ -49,9 +51,9 @@ public class OrderTableDAOImpl implements OrderTableDAO {
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			if (rs.next()) {
-			    int id = rs.getInt(1);
-			    System.out.println("Generated Order ID = " + id);
-			    return id;
+				int id = rs.getInt(1);
+				System.out.println("Generated Order ID = " + id);
+				return id;
 			}
 
 			System.out.println("Generated key not found!");
@@ -200,6 +202,27 @@ public class OrderTableDAOImpl implements OrderTableDAO {
 		return orders;
 	}
 
+	@Override
+	public void updateOrderStatus(int orderId, String status) {
+
+		Connection con = DBConnection.getConnection();
+
+		try {
+
+			PreparedStatement pstmt = con.prepareStatement(UPDATE_STATUS_QUERY);
+
+			pstmt.setString(1, status);
+			pstmt.setInt(2, orderId);
+
+			int rows = pstmt.executeUpdate();
+
+			System.out.println("Rows Updated = " + rows);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static OrderTable getAllOrdersByResultSet(ResultSet res) throws SQLException {
 		int id = res.getInt("orderId");
 		int userId = res.getInt("userId");
@@ -213,6 +236,30 @@ public class OrderTableDAOImpl implements OrderTableDAO {
 		OrderTable oi = new OrderTable(id, userId, restaurantId, orderDate, totalAmount, status, payment,
 				deliveryAddress);
 		return oi;
+	}
+
+	@Override
+	public int getOrderCount() {
+
+		int count = 0;
+
+		Connection con = DBConnection.getConnection();
+
+		try {
+
+			PreparedStatement pstmt = con.prepareStatement(COUNT_QUERY);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return count;
 	}
 
 }
